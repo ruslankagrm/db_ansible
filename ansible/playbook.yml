@@ -1,0 +1,7 @@
+---
+- name: Set up instance
+  hosts: db_instance
+  remote_user: rus
+  become: yes
+  roles:
+    - postgres_db
