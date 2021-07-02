@@ -16,6 +16,13 @@
     state: latest
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Copy PostgresSql hg_hba file
+  template:
+    src: pg_hba.conf.j2
+    dest: "/etc/postgresql/{{ postgres_version }}/main/pg_hba.conf"
+    owner: postgres
+    mode: 0644
+
 - name: Copy PostgresSql configuration file
   template:
     src: postgresql.conf.j2
@@ -26,6 +33,8 @@
     - restart postgres
 
 - name: Set pass and login
+  become: true
+  become_user: "{{ postgres_user }}"
   postgresql_user:
     user: "{{ postgres_user }}"
     password: "{{ postgres_pass }}"
